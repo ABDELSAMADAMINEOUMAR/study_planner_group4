@@ -15,3 +15,15 @@
 | 3 | Statistics and Cards | Pending | Show total hours and number of completed goals using `fold()` and `where()`. |
 | 4 | Second Screen | Pending | Add a form to create new goals, with validation, and navigate to it with `Navigator`. |
 | 5 | Database | Pending | Save goals with SQLite (`sqflite`) so they stay after the app restarts. |
+
+
+## Screenshots
+
+### Phase 1: Static Screen
+![Phase 1 static screen](screenshots/phase1_static_screen.png)
+
+### Phase 2: Before toggle
+![Phase 2 before toggle](screenshots/phase2_before_toggle.png)
+
+### Phase 2: After toggle
+![Phase 2 after toggle](screenshots/phase2_after_toggle.png)
