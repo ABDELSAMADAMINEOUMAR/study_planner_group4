@@ -1,10 +1,10 @@
 # study_planner
 # Registrations numbes of members of Group 4
-27047/2024
-25740/2024
-25605/2024
-26034/2024
-26857/2024
+#27047/2024
+#25740/2024
+#25605/2024
+#26034/2024
+#26857/2024
 
 ## Project Phases
 
