@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+
 void main() {
   runApp(const MyApp());
 }
 
-// root of the app
+// STATIC
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -16,21 +17,62 @@ class MyApp extends StatelessWidget {
   }
 }
 
-// the main screen and thenScaffold gives us the AppBar body and then  button
-class HomeScreen extends StatelessWidget {
+// STATIC
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  // LOGIC
+  // CONNECTION 1: will be loaded from the database in Phase 5
+  List<Map<String, dynamic>> goals = [
+    {'subject': 'Mathematics', 'hours': 10, 'done': false},
+    {'subject': 'Physics', 'hours': 8, 'done': false},
+    {'subject': 'Dart & Flutter', 'hours': 12, 'done': true},
+  ];
+
+  // LOGIC
+  // CONNECTION 2: will also update the database in Phase 5
+  void toggleDone(int index) {
+    setState(() {
+      bool current = goals[index]['done'];
+      goals[index]['done'] = !current;
+    });
+  }
+
+  // LOGIC
+  void deleteGoal(int index) {
+    setState(() {
+      goals.removeAt(index);
+    });
+  }
+
+  // LOGIC
+  void addSampleGoal() {
+    setState(() {
+      int number = goals.length + 1;
+      goals.add({
+        'subject': 'Sample goal $number',
+        'hours': 2,
+        'done': false,
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // app title in the top bar
+      // STATIC
       appBar: AppBar(
         title: const Text('My Study Planner'),
       ),
 
+      // STATIC
       body: Column(
         children: [
-          //heading above the list: after the list it makes a heading
           const Padding(
             padding: EdgeInsets.all(16),
             child: Text(
@@ -39,39 +81,53 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
 
-          // card 1: in that contained goals details
-          const Card(
-            child: ListTile(
-              leading: Icon(Icons.book),
-              title: Text('Mathematics'),
-              subtitle: Text('10 hours'),
-            ),
-          ),
+          // Expanded makes the list fill the space under the heading
+          Expanded(
+            child: ListView.builder(
+              itemCount: goals.length,
+              itemBuilder: (context, index) {
+                // LOGIC
+                Map<String, dynamic> goal = goals[index];
+                bool isDone = goal['done'];
 
-          // card 2: same as the first card
-          const Card(
-            child: ListTile(
-              leading: Icon(Icons.science),
-              title: Text('Physics'),
-              subtitle: Text('8 hours'),
-            ),
-          ),
-
-          // card 3: same as all the previous cards
-          const Card(
-            child: ListTile(
-              leading: Icon(Icons.code),
-              title: Text('Dart & Flutter'),
-              subtitle: Text('12 hours'),
+                return Card(
+                  child: ListTile(
+                    onTap: () {
+                      toggleDone(index);
+                    },
+                    leading: Checkbox(
+                      value: isDone,
+                      onChanged: (value) {
+                        toggleDone(index);
+                      },
+                    ),
+                    title: Text(
+                      goal['subject'],
+                      style: TextStyle(
+                        decoration: isDone
+                            ? TextDecoration.lineThrough
+                            : TextDecoration.none,
+                      ),
+                    ),
+                    subtitle: Text('${goal['hours']} hours'),
+                    trailing: IconButton(
+                      icon: const Icon(Icons.delete),
+                      onPressed: () {
+                        deleteGoal(index);
+                      },
+                    ),
+                  ),
+                );
+              },
             ),
           ),
         ],
       ),
 
-      // button that does nothing yet
+      // STATIC
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        child: const Icon(Icons.add)
+        onPressed: addSampleGoal,
+        child: const Icon(Icons.add),
       ),
     );
   }
