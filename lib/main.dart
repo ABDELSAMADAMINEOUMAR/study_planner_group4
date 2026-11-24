@@ -3,7 +3,7 @@ void main() {
   runApp(const MyApp());
 }
 
-// STATIC: root of the app. MaterialApp sets up the theme and navigation.
+// root of the app
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -16,21 +16,21 @@ class MyApp extends StatelessWidget {
   }
 }
 
-// STATIC: the main screen. Scaffold gives us the AppBar, body and button slots.
+// the main screen and thenScaffold gives us the AppBar body and then  button
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // STATIC: app title in the top bar
+      // app title in the top bar
       appBar: AppBar(
         title: const Text('My Study Planner'),
       ),
 
       body: Column(
         children: [
-          // STATIC: heading above the list
+          //heading above the list: after the list it makes a heading
           const Padding(
             padding: EdgeInsets.all(16),
             child: Text(
@@ -39,7 +39,7 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
 
-          // STATIC: goal card 1
+          // card 1: in that contained goals details
           const Card(
             child: ListTile(
               leading: Icon(Icons.book),
@@ -48,7 +48,7 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
 
-          // STATIC: goal card 2
+          // card 2: same as the first card
           const Card(
             child: ListTile(
               leading: Icon(Icons.science),
@@ -57,7 +57,7 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
 
-          // STATIC: goal card 3
+          // card 3: same as all the previous cards
           const Card(
             child: ListTile(
               leading: Icon(Icons.code),
@@ -68,7 +68,7 @@ class HomeScreen extends StatelessWidget {
         ],
       ),
 
-      // STATIC: button that does nothing yet (we wire it up in Phase 4)
+      // button that does nothing yet
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
         child: const Icon(Icons.add)
