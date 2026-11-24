@@ -22,8 +22,8 @@
 ### Phase 1: Static Screen
 ![Phase 1 static screen](screenshots/phase1_static_screen.png)
 
-### Phase 2: Before toggle
+### Phase 2: Before toggle mathematics as an example
 ![Phase 2 before toggle](screenshots/phase2_before_toggle.png)
 
-### Phase 2: After toggle
+### Phase 2: After toggle now the difference is clear
 ![Phase 2 after toggle](screenshots/phase2_after_toggle.png)
