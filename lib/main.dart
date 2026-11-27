@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 void main() {
   runApp(const MyApp());
 }
-
-// STATIC
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -16,8 +14,6 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-
-// STATIC
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -26,53 +22,54 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  // LOGIC
-  // CONNECTION 1: will be loaded from the database in Phase 5
   List<Map<String, dynamic>> goals = [
     {'subject': 'Mathematics', 'hours': 10, 'done': false},
     {'subject': 'Physics', 'hours': 8, 'done': false},
     {'subject': 'Dart & Flutter', 'hours': 12, 'done': true},
+    {'subject': 'Coding', 'hours': 8, 'done': false},
+
   ];
 
-  // LOGIC
-  // CONNECTION 2: will also update the database in Phase 5
+  int get totalHours {
+    return goals.fold(0, (sum, goal) => sum + (goal['hours'] as int));
+  }
+  int get completedCount {
+    return goals.where((goal) => goal['done'] == true).length;
+  }
+  int get remainingCount {
+    return goals.where((goal) => goal['done'] == false).length;
+  }
   void toggleDone(int index) {
     setState(() {
-      bool current = goals[index]['done'];
-      goals[index]['done'] = !current;
+      goals[index]['done'] = !goals[index]['done'];
     });
   }
-
-  // LOGIC
   void deleteGoal(int index) {
     setState(() {
       goals.removeAt(index);
     });
   }
-
-  // LOGIC
   void addSampleGoal() {
     setState(() {
-      int number = goals.length + 1;
-      goals.add({
-        'subject': 'Sample goal $number',
-        'hours': 2,
-        'done': false,
-      });
+      goals.add({'subject': 'Sample goal', 'hours': 2, 'done': false});
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // STATIC
-      appBar: AppBar(
-        title: const Text('My Study Planner'),
-      ),
+      appBar: AppBar(title: const Text('My Study Planner')),
 
-      // STATIC
       body: Column(
         children: [
+          Row(
+            children: [
+              Expanded(child: StatCard(title: 'Total hours', value: '$totalHours')),
+              Expanded(child: StatCard(title: 'Completed', value: '$completedCount')),
+              Expanded(child: StatCard(title: 'Remaining', value: '$remainingCount')),
+            ],
+          ),
+
           const Padding(
             padding: EdgeInsets.all(16),
             child: Text(
@@ -81,45 +78,40 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
 
-          // Expanded makes the list fill the space under the heading
+          // LOGIC: empty message or the list
           Expanded(
-            child: ListView.builder(
-              itemCount: goals.length,
-              itemBuilder: (context, index) {
-                // LOGIC
-                Map<String, dynamic> goal = goals[index];
-                bool isDone = goal['done'];
+            child: goals.isEmpty
+                ? const Center(child: Text('No goals yet. Tap + to add one.'))
+                : ListView.builder(
+                    itemCount: goals.length,
+                    itemBuilder: (context, index) {
+                      Map<String, dynamic> goal = goals[index];
+                      bool isDone = goal['done'];
 
-                return Card(
-                  child: ListTile(
-                    onTap: () {
-                      toggleDone(index);
+                      return Card(
+                        child: ListTile(
+                          onTap: () => toggleDone(index),
+                          leading: Checkbox(
+                            value: isDone,
+                            onChanged: (value) => toggleDone(index),
+                          ),
+                          title: Text(
+                            goal['subject'],
+                            style: TextStyle(
+                              decoration: isDone
+                                  ? TextDecoration.lineThrough
+                                  : TextDecoration.none,
+                            ),
+                          ),
+                          subtitle: Text('${goal['hours']} hours'),
+                          trailing: IconButton(
+                            icon: const Icon(Icons.delete),
+                            onPressed: () => deleteGoal(index),
+                          ),
+                        ),
+                      );
                     },
-                    leading: Checkbox(
-                      value: isDone,
-                      onChanged: (value) {
-                        toggleDone(index);
-                      },
-                    ),
-                    title: Text(
-                      goal['subject'],
-                      style: TextStyle(
-                        decoration: isDone
-                            ? TextDecoration.lineThrough
-                            : TextDecoration.none,
-                      ),
-                    ),
-                    subtitle: Text('${goal['hours']} hours'),
-                    trailing: IconButton(
-                      icon: const Icon(Icons.delete),
-                      onPressed: () {
-                        deleteGoal(index);
-                      },
-                    ),
                   ),
-                );
-              },
-            ),
           ),
         ],
       ),
@@ -128,6 +120,31 @@ class _HomeScreenState extends State<HomeScreen> {
       floatingActionButton: FloatingActionButton(
         onPressed: addSampleGoal,
         child: const Icon(Icons.add),
+      ),
+    );
+  }
+}
+
+class StatCard extends StatelessWidget {
+  const StatCard({super.key, required this.title, required this.value});
+
+  final String title;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          children: [
+            Text(title),
+            Text(
+              value,
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
       ),
     );
   }
